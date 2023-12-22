@@ -1,0 +1,14 @@
+modules:
+  macro:
+    - key: brandad-gnome-tools-hello-world
+      function: main
+      title: brandad-gnome-tools
+      description: Inserts Hello world!
+  function:
+    - key: main
+      handler: index.run
+app:
+  id: ari:cloud:ecosystem::app/1f072118-8411-4e6f-8f02-4ce44c02f6c9
+permissions:
+  scopes:
+    - read:confluence-content.summary
