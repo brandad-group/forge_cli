@@ -1,15 +1,8 @@
 import api, { route } from "@forge/api";
-import ForgeUI, { render, Fragment, Text, Macro, useProductContext, useState, Table, Head, Row, Cell } from '@forge/ui';
+import ForgeUI, { render, Fragment, Text, Macro, useState, Table, Head, Row, Cell } from '@forge/ui';
  
-// const fetchCommentsForContent = async (contentId) => {
-//   const res = await api
-//     .asUser()
-//     .requestConfluence(route`/wiki/rest/api/content/${contentId}/child/comment`);
- 
-//   const data = await res.json();
-//   return data.results;
-// };
- 
+const spacesCache = [];
+
 const fetchBlogPosts = async () => {
   const res = await api
     .asUser()
@@ -23,28 +16,34 @@ const fetchBlogPosts = async () => {
   return data.results;
 };
  
-// const fetchBlogPostHistory = async (blogPostId) => {
-//   const res = await api
-//     .asUser()
-//     .requestConfluence(route`/wiki/rest/api/content/${blogPostId}/history`);
+const fetchBlogSpace = async (spaceId) => {
+
+  if(spacesCache[spaceId])
+    return spacesCache[spaceId];
+
+  const res = await api
+    .asUser()
+    .requestConfluence(route`/wiki/api/v2/spaces/${spaceId}`, {
+      headers: {
+        'Accept': 'application/json'
+      }
+    });
  
-//   const data = await res.json();
-//   return data.results;
-// };
+  const data = await res.json();
+
+  spacesCache[spaceId] = data;
+
+  return data;
+};
  
 const App = () => {
-  const context = useProductContext();
-  // const [comments] = useState(async () => await fetchCommentsForContent(context.contentId));
-  // console.log(`Number of comments on this page: ${comments.length}`);
  
   const [blogs] = useState(async () => {
     const fetchedBlogs = await fetchBlogPosts();
-    // if (fetchedBlogs.length > 0) {
-    //   const history = await fetchBlogPostHistory(fetchedBlogs[0].id);
-    //   if (history && history.length > 0) {
-    //     console.log(history[0]); // Log the first history record of the first blog post
-    //   }
-    // }
+    if (fetchedBlogs.length > 0) {
+      for(var i = 0; i < fetchedBlogs.length; i++)
+        await fetchBlogSpace(fetchedBlogs[i].spaceId);
+    }
     return fetchedBlogs;
   });
  
@@ -52,18 +51,15 @@ const App = () => {
     var blogPostElements = [];
     for (var i = 0; i < blogPosts.length; i++) {
       var post = blogPosts[i];
-      if (i == 6) console.log(JSON.stringify(post)); // Log the current post as JSON
- 
       blogPostElements.push(
         <Row>
             <Cell><Text>{post.id}</Text></Cell>
-            <Cell><Text>{post.spaceId}</Text></Cell>
+            <Cell><Text>{spacesCache[post.spaceId].name}</Text></Cell>
             <Cell><Text>{new Date(post.createdAt).toLocaleString()}</Text></Cell>
             <Cell><Text>{post.title}</Text></Cell>
         </Row>);
     }
     return blogPostElements;
-    //return blogPosts.map((post) => <Text key={post.id}>{post.title}</Text>);
   };
  
   return (
