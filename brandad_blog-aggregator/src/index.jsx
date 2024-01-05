@@ -66,7 +66,7 @@ const App = () => {
     <Fragment>
       <Text>Hello world!</Text>
       <Text>Hello BRANDAD!</Text>
-      <Text>Hello API-Call-Test! 5</Text>
+      <Text>Hello API-Call-Test! 77777</Text>
       <Text>
         Number of comments on this page: {comments.length}
       </Text>
