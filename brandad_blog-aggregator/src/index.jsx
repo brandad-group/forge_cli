@@ -64,7 +64,7 @@ const App = () => {
  
   return (
     <Fragment>
-      <Text>Hello world!</Text>
+      <Text>Hello + world!</Text>
       <Text>Hello BRANDAD!</Text>
       <Text>Hello API-Call-Test! 5</Text>
       <Text>
