@@ -15,3 +15,4 @@ permissions:
     - read:confluence-space.summary
     - read:confluence-content.summary
     - read:confluence-content.all
+    - read:page:confluence

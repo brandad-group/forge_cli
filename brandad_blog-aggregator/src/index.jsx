@@ -1,46 +1,50 @@
 import api, { route } from "@forge/api";
 import ForgeUI, { render, Fragment, Text, Macro, useProductContext, useState, Table, Head, Row, Cell } from '@forge/ui';
  
-const fetchCommentsForContent = async (contentId) => {
-  const res = await api
-    .asUser()
-    .requestConfluence(route`/wiki/rest/api/content/${contentId}/child/comment`);
+// const fetchCommentsForContent = async (contentId) => {
+//   const res = await api
+//     .asUser()
+//     .requestConfluence(route`/wiki/rest/api/content/${contentId}/child/comment`);
  
-  const data = await res.json();
-  return data.results;
-};
+//   const data = await res.json();
+//   return data.results;
+// };
  
 const fetchBlogPosts = async () => {
   const res = await api
     .asUser()
-    .requestConfluence(route`/wiki/rest/api/content?type=blogpost`);
+    .requestConfluence(route`/wiki/api/v2/blogposts`, {
+      headers: {
+        'Accept': 'application/json'
+      }
+    });
  
   const data = await res.json();
   return data.results;
 };
  
-const fetchBlogPostHistory = async (blogPostId) => {
-  const res = await api
-    .asUser()
-    .requestConfluence(route`/wiki/rest/api/content/${blogPostId}/history`);
+// const fetchBlogPostHistory = async (blogPostId) => {
+//   const res = await api
+//     .asUser()
+//     .requestConfluence(route`/wiki/rest/api/content/${blogPostId}/history`);
  
-  const data = await res.json();
-  return data.results;
-};
+//   const data = await res.json();
+//   return data.results;
+// };
  
 const App = () => {
   const context = useProductContext();
-  const [comments] = useState(async () => await fetchCommentsForContent(context.contentId));
-  console.log(`Number of comments on this page: ${comments.length}`);
+  // const [comments] = useState(async () => await fetchCommentsForContent(context.contentId));
+  // console.log(`Number of comments on this page: ${comments.length}`);
  
   const [blogs] = useState(async () => {
     const fetchedBlogs = await fetchBlogPosts();
-    if (fetchedBlogs.length > 0) {
-      const history = await fetchBlogPostHistory(fetchedBlogs[0].id);
-      if (history && history.length > 0) {
-        console.log(history[0]); // Log the first history record of the first blog post
-      }
-    }
+    // if (fetchedBlogs.length > 0) {
+    //   const history = await fetchBlogPostHistory(fetchedBlogs[0].id);
+    //   if (history && history.length > 0) {
+    //     console.log(history[0]); // Log the first history record of the first blog post
+    //   }
+    // }
     return fetchedBlogs;
   });
  
@@ -67,11 +71,11 @@ const App = () => {
       <Text>Hello world!</Text>
       <Text>Hello BRANDAD!</Text>
       <Text>Hello API-Call-Test! 5</Text>
-      <Text>
+      {/* <Text>
         Number of comments on this page: {comments.length}
-      </Text>
+      </Text> */}
       <Text>
-        Number of blogposts in this conflunce instance: {blogs.length}
+        Number of blogposts in this conflunce instance: {JSON.stringify(blogs)}
       </Text>
       <Table>
         <Head>
@@ -80,7 +84,7 @@ const App = () => {
           <Cell><Text>Datum</Text></Cell>
           <Cell><Text>Titel</Text></Cell>
         </Head>
-        {renderBlogPostTitles(blogs)}
+        {/* {renderBlogPostTitles(blogs)} */}
       </Table>
     </Fragment>
     
