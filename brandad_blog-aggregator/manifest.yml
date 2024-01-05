@@ -11,8 +11,5 @@ app:
   id: ari:cloud:ecosystem::app/a4f6df21-3fb9-4de2-a0ec-90528d3863f9
 permissions:
   scopes:
-    - search:confluence
-    - read:confluence-space.summary
-    - read:confluence-content.summary
-    - read:confluence-content.all
     - read:page:confluence
+    - read:space:confluence

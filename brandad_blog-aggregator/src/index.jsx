@@ -13,7 +13,7 @@ import ForgeUI, { render, Fragment, Text, Macro, useProductContext, useState, Ta
 const fetchBlogPosts = async () => {
   const res = await api
     .asUser()
-    .requestConfluence(route`/wiki/api/v2/blogposts`, {
+    .requestConfluence(route`/wiki/api/v2/blogposts?sort=-created-date&limit=10`, {
       headers: {
         'Accept': 'application/json'
       }
@@ -57,8 +57,8 @@ const App = () => {
       blogPostElements.push(
         <Row>
             <Cell><Text>{post.id}</Text></Cell>
-            <Cell><Text>{post._expandable.space}</Text></Cell>
-            <Cell><Text>DATUM</Text></Cell>
+            <Cell><Text>{post.spaceId}</Text></Cell>
+            <Cell><Text>{new Date(post.createdAt).toLocaleString()}</Text></Cell>
             <Cell><Text>{post.title}</Text></Cell>
         </Row>);
     }
@@ -75,7 +75,7 @@ const App = () => {
         Number of comments on this page: {comments.length}
       </Text> */}
       <Text>
-        Number of blogposts in this conflunce instance: {JSON.stringify(blogs)}
+        Number of blogposts in this conflunce instance: {blogs.length}
       </Text>
       <Table>
         <Head>
@@ -84,7 +84,7 @@ const App = () => {
           <Cell><Text>Datum</Text></Cell>
           <Cell><Text>Titel</Text></Cell>
         </Head>
-        {/* {renderBlogPostTitles(blogs)} */}
+        {renderBlogPostTitles(blogs)}
       </Table>
     </Fragment>
     
