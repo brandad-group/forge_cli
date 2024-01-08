@@ -1,5 +1,5 @@
 import api, { route } from "@forge/api";
-import ForgeUI, { render, Fragment, Text, Macro, useState, Table, Head, Row, Cell } from '@forge/ui';
+import ForgeUI, { render, Fragment, Text, Macro, useState, Table, Head, Row, Cell, Image } from '@forge/ui';
  
 const spacesCache = [];
 
@@ -35,14 +35,33 @@ const fetchBlogSpace = async (spaceId) => {
 
   return data;
 };
+
+const fetchBlogImage = async (blogId) => {
+  const res = await api
+    .asUser()
+    .requestConfluence(route`/wiki/api/v2/blogposts/${blogId}/properties?key=cover-picture-id-published`, {
+      headers: {
+        'Accept': 'application/json'
+      }
+    });
+ 
+  const data = await res.json();
+
+  if(data.results.length != 1)
+    return undefined;
+
+  return data.results[0].value;
+};
  
 const App = () => {
  
   const [blogs] = useState(async () => {
     const fetchedBlogs = await fetchBlogPosts();
     if (fetchedBlogs.length > 0) {
-      for(var i = 0; i < fetchedBlogs.length; i++)
+      for(var i = 0; i < fetchedBlogs.length; i++) {
         await fetchBlogSpace(fetchedBlogs[i].spaceId);
+        fetchedBlogs[i].__image = await fetchBlogImage(fetchedBlogs[i].id);
+      }
     }
     return fetchedBlogs;
   });
@@ -54,9 +73,10 @@ const App = () => {
       blogPostElements.push(
         <Row>
             <Cell><Text>{post.id}</Text></Cell>
-            <Cell><Text>{spacesCache[post.spaceId].name}</Text></Cell>
-            <Cell><Text>{new Date(post.createdAt).toLocaleString()}</Text></Cell>
+            <Cell><Text>{spacesCache[post.spaceId]?.name ?? 'undefined'}</Text></Cell>
+            <Cell><Text>{new Date(post.createdAt)?.toLocaleString() ?? 'undefined'}</Text></Cell>
             <Cell><Text>{post.title}</Text></Cell>
+            <Cell><Image alt="Bild" src={post.__image.id}/></Cell>
         </Row>);
     }
     return blogPostElements;
@@ -79,6 +99,7 @@ const App = () => {
           <Cell><Text>Bereich</Text></Cell>
           <Cell><Text>Datum</Text></Cell>
           <Cell><Text>Titel</Text></Cell>
+          <Cell><Text>Bild</Text></Cell>
         </Head>
         {renderBlogPostTitles(blogs)}
       </Table>
