@@ -76,7 +76,7 @@ const App = () => {
             <Cell><Text>{spacesCache[post.spaceId]?.name ?? 'undefined'}</Text></Cell>
             <Cell><Text>{new Date(post.createdAt)?.toLocaleString() ?? 'undefined'}</Text></Cell>
             <Cell><Text>{post.title}</Text></Cell>
-            <Cell><Image alt="Bild" src={post.__image.id}/></Cell>
+            <Cell><Image alt="Bild" src={JSON.parse(post.__image).id}/></Cell>
         </Row>);
     }
     return blogPostElements;
