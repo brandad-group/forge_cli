@@ -13,3 +13,6 @@ permissions:
   scopes:
     - read:page:confluence
     - read:space:confluence
+  external:
+    images:
+      - 'https://images.unsplash.com/'
