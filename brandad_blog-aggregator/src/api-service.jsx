@@ -51,3 +51,29 @@ export const fetchBlogImage = async (blogId) => {
 
     return JSON.parse(data.results[0].value);
 };
+
+export const fetchBlogAttachment = async (id, fileId) => {
+    const res = await api
+        .asUser()
+        .requestConfluence(route`/wiki/api/v2/blogposts/${blogId}/attachments`, {
+            headers: {
+                'Accept': 'application/json'
+            }
+        });
+
+    const data = await res.json();
+
+    // TODO check for matching fileId
+};
+
+export const getAttachmentDl = async (id, attachmentId) => {
+    const res = await api
+        .asUser()
+        .requestConfluence(route`/wiki/rest/api/content/${id}/child/attachment/${attachmentId}/download`);
+
+    const contentType = response.headers.get('content-type');
+    const buffer = await response.arrayBuffer();
+    const imageInBase64 = Buffer.from(buffer).toString('base64');
+
+    return `data:${contentType};base64,${imageInBase64}`;
+};
