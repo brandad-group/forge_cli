@@ -13,6 +13,7 @@ permissions:
   scopes:
     - read:page:confluence
     - read:space:confluence
+    - read:attachment:confluence
   external:
     images:
       - '*'

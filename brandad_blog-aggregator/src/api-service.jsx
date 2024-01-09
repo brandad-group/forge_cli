@@ -49,10 +49,17 @@ export const fetchBlogImage = async (blogId) => {
     if (data.results.length != 1)
         return undefined;
 
-    return JSON.parse(data.results[0].value);
+    const uuidOrUrl = JSON.parse(data.results[0].value).id;
+
+    const regex = new RegExp(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/);
+
+    if (regex.test(uuidOrUrl))
+        return fetchBlogImageInternalId(blogId, uuidOrUrl);
+
+    return uuidOrUrl;
 };
 
-export const fetchBlogAttachment = async (id, fileId) => {
+export const fetchBlogImageInternalId = async (blogId, fileId) => {
     const res = await api
         .asUser()
         .requestConfluence(route`/wiki/api/v2/blogposts/${blogId}/attachments`, {
@@ -63,17 +70,6 @@ export const fetchBlogAttachment = async (id, fileId) => {
 
     const data = await res.json();
 
-    // TODO check for matching fileId
-};
+    return '/wiki' + data.results.find( x => x.fileId == fileId).downloadLink;
 
-export const getAttachmentDl = async (id, attachmentId) => {
-    const res = await api
-        .asUser()
-        .requestConfluence(route`/wiki/rest/api/content/${id}/child/attachment/${attachmentId}/download`);
-
-    const contentType = response.headers.get('content-type');
-    const buffer = await response.arrayBuffer();
-    const imageInBase64 = Buffer.from(buffer).toString('base64');
-
-    return `data:${contentType};base64,${imageInBase64}`;
 };

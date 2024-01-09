@@ -24,9 +24,9 @@ const App = () => {
         <Row>
             <Cell><Text>{post.id}</Text></Cell>
             <Cell><Text>{spacesCache[post.spaceId]?.name ?? 'undefined'}</Text></Cell>
-            <Cell><Text>{new Date(post.createdAt)?.toLocaleString() ?? 'undefined'}</Text></Cell>
+            <Cell><Text>{new Date(post.createdAt)?.toLocaleString('de-DE') ?? 'undefined'}</Text></Cell>
             <Cell><Text>{post.title}</Text></Cell>
-            <Cell><Image alt="Bild" src={post.__image.id}/></Cell>
+            <Cell><Image alt="Bild" src={post.__image}/></Cell>
         </Row>);
     }
     return blogPostElements;
@@ -34,13 +34,6 @@ const App = () => {
  
   return (
     <Fragment>
-      <Image alt="Header" src="https://brandad-wiki.atlassian.net/wiki/download/attachments/69304425/twice-jihyo-feel-special-uhdpaper.com-8K-5.851.jpg?version=1&modificationDate=1704707790369&cacheVersion=1&api=v2&download=true"></Image>
-      <Text>Hello world!</Text>
-      <Text>Hello BRANDAD!</Text>
-      <Text>Hello API-Call-Test! 5</Text>
-      {/* <Text>
-        Number of comments on this page: {comments.length}
-      </Text> */}
       <Text>
         Number of blogposts in this conflunce instance: {blogs.length}
       </Text>
