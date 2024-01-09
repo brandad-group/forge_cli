@@ -1,57 +1,7 @@
-import api, { route } from "@forge/api";
 import ForgeUI, { render, Fragment, Text, Macro, useState, Table, Head, Row, Cell, Image } from '@forge/ui';
  
-const spacesCache = [];
-
-const fetchBlogPosts = async () => {
-  const res = await api
-    .asUser()
-    .requestConfluence(route`/wiki/api/v2/blogposts?sort=-created-date&limit=10`, {
-      headers: {
-        'Accept': 'application/json'
-      }
-    });
- 
-  const data = await res.json();
-  return data.results;
-};
- 
-const fetchBlogSpace = async (spaceId) => {
-
-  if(spacesCache[spaceId])
-    return spacesCache[spaceId];
-
-  const res = await api
-    .asUser()
-    .requestConfluence(route`/wiki/api/v2/spaces/${spaceId}`, {
-      headers: {
-        'Accept': 'application/json'
-      }
-    });
- 
-  const data = await res.json();
-
-  spacesCache[spaceId] = data;
-
-  return data;
-};
-
-const fetchBlogImage = async (blogId) => {
-  const res = await api
-    .asUser()
-    .requestConfluence(route`/wiki/api/v2/blogposts/${blogId}/properties?key=cover-picture-id-published`, {
-      headers: {
-        'Accept': 'application/json'
-      }
-    });
- 
-  const data = await res.json();
-
-  if(data.results.length != 1)
-    return undefined;
-
-  return data.results[0].value;
-};
+import { fetchBlogPosts, fetchBlogImage, fetchBlogSpace } from "./api-service";
+import { spacesCache } from './storage';
  
 const App = () => {
  
@@ -76,7 +26,7 @@ const App = () => {
             <Cell><Text>{spacesCache[post.spaceId]?.name ?? 'undefined'}</Text></Cell>
             <Cell><Text>{new Date(post.createdAt)?.toLocaleString() ?? 'undefined'}</Text></Cell>
             <Cell><Text>{post.title}</Text></Cell>
-            <Cell><Image alt="Bild" src={JSON.parse(post.__image).id}/></Cell>
+            <Cell><Image alt="Bild" src={post.__image.id}/></Cell>
         </Row>);
     }
     return blogPostElements;
