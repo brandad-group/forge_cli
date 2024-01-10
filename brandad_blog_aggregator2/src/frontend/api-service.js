@@ -1,7 +1,5 @@
-import { route, assumeTrustedRoute } from "@forge/api";
 import {requestConfluence} from "@forge/bridge";
-//export const spacesCache = [];
-//import { spacesCache, navStack } from './storage';
+import { spacesCache, navStack } from './storage';
 
 export const fetchBlogPosts = async (nextLink, back) => {
 /*
@@ -20,7 +18,7 @@ export const fetchBlogPosts = async (nextLink, back) => {
     }*/
 
     const res = await
-        requestConfluence(route`/wiki/api/v2/blogposts?sort=-created-date&limit=10`, {
+        requestConfluence(`/wiki/api/v2/blogposts?sort=-created-date&limit=10`, {
             headers: {
                 'Accept': 'application/json'
             }
@@ -36,7 +34,7 @@ export const fetchBlogSpace = async (spaceId) => {
         return spacesCache[spaceId];
 
     const res = await
-        requestConfluence(route`/wiki/api/v2/spaces/${spaceId}`, {
+        requestConfluence(`/wiki/api/v2/spaces/${spaceId}`, {
             headers: {
                 'Accept': 'application/json'
             }
@@ -51,7 +49,7 @@ export const fetchBlogSpace = async (spaceId) => {
 
 export const fetchBlogImage = async (blogId) => {
     const res = await
-        requestConfluence(route`/wiki/api/v2/blogposts/${blogId}/properties?key=cover-picture-id-published`, {
+        requestConfluence(`/wiki/api/v2/blogposts/${blogId}/properties?key=cover-picture-id-published`, {
             headers: {
                 'Accept': 'application/json'
             }
@@ -73,7 +71,7 @@ export const fetchBlogImage = async (blogId) => {
 };
 
 export const fetchBlogImageInternalId = async (blogId, fileId) => {
-    const res = await requestConfluence(route`/wiki/api/v2/blogposts/${blogId}/attachments`, {
+    const res = await requestConfluence(`/wiki/api/v2/blogposts/${blogId}/attachments`, {
             headers: {
                 'Accept': 'application/json'
             }
@@ -81,6 +79,6 @@ export const fetchBlogImageInternalId = async (blogId, fileId) => {
 
     const data = await res.json();
 
-    return '/wiki' + data.results.find(x => x.fileId == fileId).downloadLink;
+    return 'https://brandad-wiki.atlassian.net/wiki' + data.results.find(x => x.fileId == fileId).downloadLink;
 
 };
