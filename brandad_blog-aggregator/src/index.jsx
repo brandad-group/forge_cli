@@ -1,4 +1,5 @@
-import ForgeUI, { render, Fragment, Text, Macro, useState, Table, Head, Row, Cell, Image, Button } from '@forge/ui';
+import ForgeUI, { render, Fragment, Macro, useState, Table, Head, Row, Cell, Button} from '@forge/ui';
+import {Inline, Stack, Tag, Image, Text} from '@forge/react';
 
 import { fetchBlogPosts, fetchBlogImage, fetchBlogSpace } from "./api-service";
 import { spacesCache } from './storage';
@@ -25,13 +26,18 @@ const App = () => {
     for (var i = 0; i < blogPosts.length; i++) {
       var post = blogPosts[i];
       blogPostElements.push(
-        <Row>
-          <Cell><Text>{post.id}</Text></Cell>
-          <Cell><Text>{spacesCache[post.spaceId]?.name ?? 'undefined'}</Text></Cell>
-          <Cell><Text>{new Date(post.createdAt)?.toLocaleString('de-DE') ?? 'undefined'}</Text></Cell>
-          <Cell><Text>{post.title}</Text></Cell>
-          <Cell><Image alt="Bild" src={post.__image} /></Cell>
-        </Row>);
+        <Inline space="space.600">
+            <Stack space="space.200">
+                <Text>{post.title}</Text>
+                <Inline grow="fill" space="space.100">
+                    <Image alt="Bild" src={post.__image} />
+                    <Stack space="space.100">
+                        <Text>{new Date(post.createdAt)?.toLocaleString('de-DE') ?? 'undefined'}</Text>
+                        <Text>{spacesCache[post.spaceId]?.name ?? 'undefined'}</Text>
+                    </Stack>
+                </Inline>
+            </Stack>
+        </Inline>);
     }
     return blogPostElements;
   };
@@ -41,7 +47,7 @@ const App = () => {
       <Text>
         Number of blogposts in this conflunce instance: {blogs.results.length}
       </Text>
-      <Table>
+      {/*<Table>
         <Head>
           <Cell><Text>ID</Text></Cell>
           <Cell><Text>Bereich</Text></Cell>
@@ -49,8 +55,9 @@ const App = () => {
           <Cell><Text>Titel</Text></Cell>
           <Cell><Text>Bild</Text></Cell>
         </Head>
-        {renderBlogPostTitles(blogs.results)}
-      </Table>
+
+      </Table>*/}
+      {renderBlogPostTitles(blogs.results)}
 
       <Button text='Vorher Seite' onClick={async () => {
         updateBlogs(await loadBlog(undefined, true))
