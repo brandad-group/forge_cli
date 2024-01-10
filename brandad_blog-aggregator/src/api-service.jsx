@@ -1,22 +1,21 @@
 import api, { route, assumeTrustedRoute } from "@forge/api";
 
-import { spacesCache, navStack } from './storage';
+import { spacesCache } from './storage';
 
-export const fetchBlogPosts = async (nextLink, back) => {
+export const fetchBlogPosts = async ([navStack, updateNavStack], back) => {
 
     let ourRoute;
 
+    let link;
     if (back) {
-        ourRoute = assumeTrustedRoute(navStack.pop())
-    } else {
-        if (nextLink) {
-            navStack.push(nextLink + '&sort=-created-date');
-            ourRoute = nextLink ? assumeTrustedRoute(navStack[navStack.length - 1]) : undefined;
-        } else {
-            navStack.push(`/wiki/api/v2/blogposts?sort=-created-date&limit=10`);
-            ourRoute = route`/wiki/api/v2/blogposts?sort=-created-date&limit=10`;
-        }
+        link = navStack.stack[navStack.stack.length - 3]; // -1: next, -2: current, -3: previous
+        updateNavStack({ stack: navStack.stack.slice(0, -2) }) // remove next and current
     }
+    else {
+        link = navStack.stack[navStack.stack.length - 1];
+    }
+
+    ourRoute = assumeTrustedRoute(link ?? `/wiki/api/v2/blogposts?sort=-created-date&limit=3`)
 
     const res = await api
         .asUser()
