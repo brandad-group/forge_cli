@@ -1,0 +1,58 @@
+html {
+    background-color: #1d2125;
+}
+
+.bg-transparent {
+    background-color: transparent;
+}
+
+.text-light {
+    color: lightgray
+}
+
+.blog-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: 2rem;
+    row-gap: 3rem;
+    color: lightgray;
+}
+
+.blog-title {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    color: lightgray;
+}
+
+.blog-link {
+    cursor: pointer;
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+.blog-image-container {
+    padding: 1rem 0;
+    height: 8rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    justify-items: center; 
+}
+
+.blog-image {
+    max-height: 100%;
+}
+
+.blog-space-name {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    color: lightgray;
+}
+
+.blog-container {
+    display: flex;
+    flex-direction: column;
+}

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
-const alignmentArr = ["start", "center", "end"];
+import { fetchBlogPosts, fetchBlogSpace, fetchBlogImage } from './api-service';
+import { spacesCache } from './storage';
 
 const loadBlog = async (nextLink, back = false) => {
   const fetchedBlogs = await fetchBlogPosts(nextLink, back);
@@ -19,45 +20,35 @@ const renderBlogPostElements = (blogPosts) => {
   for (let i = 0; i < blogPosts.length; i++) {
     let post = blogPosts[i];
     blogPostElements.push(
-      <Stack alignBlock={alignmentArr[i % alignmentArr.length]} space="space.300">
-        <Text >{post.title}</Text>
-        <Inline grow="fill" space="space.100">
-          <Stack space="space.200">
-            <Image alt="Bild" src={post.__image} size="small" />
-            <Text>{new Date(post.createdAt)?.toLocaleString('de-DE') ?? 'undefined'}</Text>
-            <Text>{spacesCache[post.spaceId]?.name ?? 'undefined'}</Text>
-            <Link href={blogPosts._links} openNewTab={true}>
-              Gehe zum Blogpost von {spacesCache[post.spaceId]?.name ?? 'undefined'}
-            </Link>
-          </Stack>
-        </Inline>
-      </Stack>
+      <div class="blog-container">
+        <h2 class="blog-title">{post.title}</h2>
+        <div class="blog-image-container">
+          <img class="blog-image" alt="Bild" src={post.__image} />
+        </div>
+        <span>{new Date(post.createdAt)?.toLocaleString('de-DE') ?? 'undefined'}</span>
+        <span class="blog-space-name">{spacesCache[post.spaceId]?.name ?? 'undefined'}</span>
+        <a class="blog-link" href={'/wiki' + post._links.webui} target='_blank'>Gehe zum Post</a>
+      </div>
     );
   }
   return blogPostElements;
 };
 
 function App() {
-  const[blogs, setBlogs] = useState(undefined);
+  const [blogs, setBlogs] = useState(undefined);
 
   useEffect(async () => {
     setBlogs(await loadBlog(undefined));
   }, []);
 
   return (
-    <div>
-      Hallo Welt
+    <div class="text-light">
+      Number of blogposts in this confluence instance: {blogs?.results?.length}
+      <div class="blog-grid">
+        {renderBlogPostElements(blogs?.results ?? [])}
+      </div>
     </div>
   );
-  /*
-
-      <Text>
-        Number of blogposts in this confluence instance: {blogs?.results?.length}
-      </Text>
-      <Inline space="space.1000" spread="space-between">
-        {renderBlogPostElements(blogs?.results ?? [])}
-      </Inline>
-   */
 }
 
 export default App;
