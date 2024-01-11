@@ -18,7 +18,7 @@ export const fetchBlogPosts = async (nextLink, back) => {
     }*/
 
     const res = await
-        requestConfluence(`/wiki/api/v2/blogposts?sort=-created-date&limit=10`, {
+        requestConfluence(`/wiki/api/v2/blogposts?sort=-created-date&limit=6`, {
             headers: {
                 'Accept': 'application/json'
             }

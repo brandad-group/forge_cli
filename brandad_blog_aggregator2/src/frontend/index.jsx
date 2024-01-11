@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import ForgeReconciler, {Inline, Stack, Text, Image} from '@forge/react';
+import ForgeReconciler, {Inline, Stack, Text, Image, Link} from '@forge/react';
 import {fetchBlogImage, fetchBlogPosts, fetchBlogSpace} from "./api-service";
 import { spacesCache, navStack } from './storage';
 const alignmentArr = ["start", "center", "end"];
@@ -20,18 +20,20 @@ const renderBlogPostElements = (blogPosts) => {
   for (let i = 0; i < blogPosts.length; i++) {
     let post = blogPosts[i];
     blogPostElements.push(
-        <Inline space="space.600">
-          <Stack alignBlock={alignmentArr[i%3]} space="space.200">
-            <Text>{post.title}</Text>
+          <Stack alignBlock={alignmentArr[i % alignmentArr.length]} space="space.300">
+            <Text >{post.title}</Text>
             <Inline grow="fill" space="space.100">
-              <Image alt="Bild" src={post.__image} />
-              <Stack space="space.100">
+              <Stack space="space.200">
+                <Image alt="Bild" src={post.__image} size="small"/>
                 <Text>{new Date(post.createdAt)?.toLocaleString('de-DE') ?? 'undefined'}</Text>
                 <Text>{spacesCache[post.spaceId]?.name ?? 'undefined'}</Text>
+                <Link href={blogPosts._links} openNewTab={true}>
+                  Gehe zum Blogpost von {spacesCache[post.spaceId]?.name ?? 'undefined'}
+                </Link>
               </Stack>
             </Inline>
           </Stack>
-        </Inline>);
+        );
   }
   return blogPostElements;
 };
@@ -49,7 +51,9 @@ const App = () => {
     <Text>
         Number of blogposts in this confluence instance: {blogs?.results?.length}
     </Text>
+      <Inline space="space.1000" spread="space-between">
       {renderBlogPostElements(blogs?.results ??[])}
+      </Inline>
     </>
   );
 };
