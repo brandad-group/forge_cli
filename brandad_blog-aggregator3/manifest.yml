@@ -11,7 +11,7 @@ modules:
       handler: index.handler
 resources:
   - key: main
-    path: static/hello-world/public
+    path: static/hello-world/build
 app:
   id: ari:cloud:ecosystem::app/c744d0b5-2814-4aa7-adb3-7cb429acd441
 permissions:
@@ -22,3 +22,6 @@ permissions:
   external:
     images:
       - '*'
+  content:
+    styles:
+      - 'unsafe-inline'
