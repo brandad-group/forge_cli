@@ -38,7 +38,7 @@ const renderBlogPostElements = (blogPosts) => {
 };
 
 function App() {
-  cconst[blogs, setBlogs] = useState(undefined);
+  const[blogs, setBlogs] = useState(undefined);
 
   useEffect(async () => {
     setBlogs(await loadBlog(undefined));
@@ -46,14 +46,18 @@ function App() {
 
   return (
     <div>
+      Hallo Welt
+    </div>
+  );
+  /*
+
       <Text>
         Number of blogposts in this confluence instance: {blogs?.results?.length}
       </Text>
       <Inline space="space.1000" spread="space-between">
         {renderBlogPostElements(blogs?.results ?? [])}
       </Inline>
-    </div>
-  );
+   */
 }
 
 export default App;

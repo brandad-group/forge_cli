@@ -15,24 +15,38 @@ const loadBlog = async (nextLink, back = false) => {
 
   return fetchedBlogs;
 };
-const renderBlogPostElements = (blogPosts) => {
+
+const renderRow = (blogPosts) => {
   let blogPostElements = [];
   for (let i = 0; i < blogPosts.length; i++) {
     let post = blogPosts[i];
     blogPostElements.push(
-          <Stack alignBlock={alignmentArr[i % alignmentArr.length]} space="space.300">
-            <Text >{post.title}</Text>
-            <Inline grow="fill" space="space.100">
-              <Stack space="space.200">
-                <Image alt="Bild" src={post.__image} size="small"/>
-                <Text>{new Date(post.createdAt)?.toLocaleString('de-DE') ?? 'undefined'}</Text>
-                <Text>{spacesCache[post.spaceId]?.name ?? 'undefined'}</Text>
-                <Link href={blogPosts._links} openNewTab={true}>
-                  Gehe zum Blogpost von {spacesCache[post.spaceId]?.name ?? 'undefined'}
-                </Link>
-              </Stack>
-            </Inline>
-          </Stack>
+        <Stack spread="space-between" alignBlock="center" space="space.300">
+          <Text>{post.title.slice(0,50)}</Text>
+          <Inline space="space.100">
+            <Stack space="space.200">
+              <Image size="small" alt="Bild" src={post.__image}/>
+              <Text>{new Date(post.createdAt)?.toLocaleString('de-DE') ?? 'undefined'}</Text>
+              <Text>{spacesCache[post.spaceId]?.name ?? 'undefined'}</Text>
+              <Link href={"/wiki" + post._links.webui} openNewTab={true}>
+                Gehe zum Blogpost von {spacesCache[post.spaceId]?.name ?? 'undefined'}
+              </Link>
+            </Stack>
+          </Inline>
+        </Stack>
+    );
+   }
+   return blogPostElements;
+  }
+
+const renderBlogPostElements = (blogPosts) => {
+  let blogPostElements = [];
+  for (let i = 0; i < blogPosts.length; i+=3) {
+    let post = blogPosts[i];
+    blogPostElements.push(
+        <Inline space="space.1000" spread="space-between">
+            {renderRow(blogPosts.slice(i, i+3))}
+          </Inline>
         );
   }
   return blogPostElements;
@@ -51,9 +65,7 @@ const App = () => {
     <Text>
         Number of blogposts in this confluence instance: {blogs?.results?.length}
     </Text>
-      <Inline space="space.1000" spread="space-between">
       {renderBlogPostElements(blogs?.results ??[])}
-      </Inline>
     </>
   );
 };
