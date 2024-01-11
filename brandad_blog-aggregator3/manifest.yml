@@ -14,3 +14,11 @@ resources:
     path: static/hello-world/public
 app:
   id: ari:cloud:ecosystem::app/c744d0b5-2814-4aa7-adb3-7cb429acd441
+permissions:
+  scopes:
+    - read:page:confluence
+    - read:space:confluence
+    - read:attachment:confluence
+  external:
+    images:
+      - '*'
