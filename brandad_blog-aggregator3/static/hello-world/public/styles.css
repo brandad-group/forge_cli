@@ -11,15 +11,16 @@ body {
 
 .flex-item {
     width: 200px;
+    height: 200px;
     margin: 10px;
     box-sizing: border-box;
     overflow: hidden;
     border-radius: 15px; /* Adjust the border-radius as needed */
     background-size: cover;
     background-position: center;
-    height: 250px; /* You can adjust the height as needed */
     position: relative;
     color: #fff;
+    background-color: green;
 }
 
 
@@ -31,7 +32,6 @@ body {
 
 .flex-item .blog-image {
     width: 200px;
-    height: 250px;
 }
 
 .flex-item span {
@@ -56,6 +56,13 @@ body {
 .blog-title {
     text-shadow: 2px 2px 4px black;
     font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.blog-link {
+    cursor: pointer;
 }
 
 .blog-details {
