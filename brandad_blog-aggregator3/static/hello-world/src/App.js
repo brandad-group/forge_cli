@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 
 import { fetchBlogPosts, fetchBlogSpace, fetchBlogImage } from './api-service';
 import { spacesCache, navStack } from './storage';
-import { router } from '@forge/bridge';
+import { router , view} from '@forge/bridge';
 
+await view.theme.enable();
 const loadBlog = async (nextLink, back = false) => {
     const fetchedBlogs = await fetchBlogPosts(nextLink, back);
     if (fetchedBlogs.results.length > 0) {
