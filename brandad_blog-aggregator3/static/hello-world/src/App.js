@@ -41,11 +41,8 @@ function App() {
     }, []);
 
     return (
-        <div class="text-light">
-            Number of blogposts in this confluence instance: {blogs?.results?.length}
-            <div class="flex-container">
-                {renderBlogPostElements(blogs?.results ?? [])}
-            </div>
+        <div class="grid-container">
+            {renderBlogPostElements(blogs?.results ?? [])}
         </div>
     );
 }
