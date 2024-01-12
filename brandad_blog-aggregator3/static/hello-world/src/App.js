@@ -4,7 +4,6 @@ import { fetchBlogPosts, fetchBlogSpace, fetchBlogImage } from './api-service';
 import { spacesCache, navStack } from './storage';
 import { router , view} from '@forge/bridge';
 
-await view.theme.enable();
 const loadBlog = async (nextLink, back = false) => {
     const fetchedBlogs = await fetchBlogPosts(nextLink, back);
     if (fetchedBlogs.results.length > 0) {
@@ -16,7 +15,6 @@ const loadBlog = async (nextLink, back = false) => {
 
     return fetchedBlogs;
 };
-
 const renderBlogPostElements = (blogs) => {
     const blogPosts = blogs?.results ?? [];
     return blogPosts.map((post, index) => (
@@ -53,6 +51,7 @@ function App() {
     const [blogs, setBlogs] = useState([]);
 
     useEffect(async () => {
+        await view.theme.enable();
         setBlogs(await loadBlog(undefined));
     }, []);
 
