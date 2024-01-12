@@ -1,58 +1,63 @@
-html {
-    background-color: #1d2125;
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
 }
 
-.bg-transparent {
-    background-color: transparent;
+.flex-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
 }
 
-.text-light {
-    color: lightgray
+.flex-item {
+    width: 200px;
+    margin: 10px;
+    box-sizing: border-box;
+    overflow: hidden;
+    border-radius: 15px; /* Adjust the border-radius as needed */
+    background-size: cover;
+    background-position: center;
+    height: 250px; /* You can adjust the height as needed */
+    position: relative;
+    color: #fff;
 }
 
-.blog-grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    column-gap: 2rem;
-    row-gap: 3rem;
-    color: lightgray;
+
+.flex-item .blog-image-container {
+    position: relative;
+    overflow: hidden;
+    border-radius: 15px 15px 0 0; /* Rounded corners at the top */
+}
+
+.flex-item .blog-image {
+    width: 200px;
+    height: 250px;
+}
+
+.flex-item span {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.flex-item .blog-space-name {
+    font-weight: lighter;
+}
+
+.overlay {
+    position: absolute;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    color: white;
 }
 
 .blog-title {
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    color: lightgray;
+    text-shadow: 2px 2px 4px black;
+    font-weight: bold;
 }
 
-.blog-link {
-    cursor: pointer;
-    &:hover {
-        text-decoration: underline;
-    }
-}
-
-.blog-image-container {
-    padding: 1rem 0;
-    height: 8rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    justify-items: center; 
-}
-
-.blog-image {
-    max-height: 100%;
-}
-
-.blog-space-name {
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    color: lightgray;
-}
-
-.blog-container {
-    display: flex;
-    flex-direction: column;
+.blog-details {
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.7); /* Semi-transparent background for details */
 }
