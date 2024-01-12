@@ -1,24 +1,21 @@
-import {requestConfluence} from "@forge/bridge";
+import { requestConfluence } from "@forge/bridge";
+
 import { spacesCache, navStack } from './storage';
 
-export const fetchBlogPosts = async (nextLink, back) => {
-/*
-    let ourRoute;
+export const fetchBlogPosts = async (nextLink, back = false) => {
 
-    if (back) {
-        ourRoute = assumeTrustedRoute(navStack.pop())
-    } else {
-        if (nextLink) {
-            navStack.push(nextLink + '&sort=-created-date');
-            ourRoute = nextLink ? assumeTrustedRoute(navStack[navStack.length - 1]) : undefined;
-        } else {
-            navStack.push(`/wiki/api/v2/blogposts?sort=-created-date&limit=10`);
-            ourRoute = route`/wiki/api/v2/blogposts?sort=-created-date&limit=10`;
-        }
-    }*/
+    let link;
+    if (navStack.length > 1 &&  back) {
+        link = navStack[navStack.length - 2];
+        navStack = navStack.slice(0, -1);
+    }
+    else if (nextLink) {
+        navStack.push(nextLink + '&sort=-created-date');
+        link = navStack[navStack.length - 1];
+    }
 
     const res = await
-        requestConfluence(`/wiki/api/v2/blogposts?sort=-created-date&limit=25`, {
+        requestConfluence(link ?? `/wiki/api/v2/blogposts?sort=-created-date&limit=9`, {
             headers: {
                 'Accept': 'application/json'
             }
@@ -72,10 +69,10 @@ export const fetchBlogImage = async (blogId) => {
 
 export const fetchBlogImageInternalId = async (blogId, fileId) => {
     const res = await requestConfluence(`/wiki/api/v2/blogposts/${blogId}/attachments`, {
-            headers: {
-                'Accept': 'application/json'
-            }
-        });
+        headers: {
+            'Accept': 'application/json'
+        }
+    });
 
     const data = await res.json();
 

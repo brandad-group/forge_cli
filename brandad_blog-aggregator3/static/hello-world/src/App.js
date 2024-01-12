@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { fetchBlogPosts, fetchBlogSpace, fetchBlogImage } from './api-service';
-import { spacesCache } from './storage';
+import { spacesCache, navStack } from './storage';
 import { router } from '@forge/bridge';
 
 const loadBlog = async (nextLink, back = false) => {
@@ -16,7 +16,8 @@ const loadBlog = async (nextLink, back = false) => {
     return fetchedBlogs;
 };
 
-const renderBlogPostElements = (blogPosts) => {
+const renderBlogPostElements = (blogs) => {
+    const blogPosts = blogs?.results ?? [];
     return blogPosts.map((post, index) => (
         <button className="blog-link" onClick={() => { router.navigate('/wiki' + post._links.webui); }}>
             <div key={index} className="flex-item">
@@ -33,16 +34,35 @@ const renderBlogPostElements = (blogPosts) => {
     ));
 };
 
+const renderPaginationButtons = (blogs, setBlogs) => {
+    var paginationButtons = [];
+
+    paginationButtons.push(
+        <button disabled={navStack.length <= 1} onClick={async () => { setBlogs(await loadBlog(undefined, true)); }}>Zurück</button>
+    );
+    paginationButtons.push(
+        <button disabled={!blogs._links?.next} onClick={async () => { setBlogs(await loadBlog(blogs._links.next, false)); }}>Nächste</button>
+    );
+
+    return paginationButtons;
+
+}
+
 function App() {
-    const [blogs, setBlogs] = useState(undefined);
+    const [blogs, setBlogs] = useState([]);
 
     useEffect(async () => {
         setBlogs(await loadBlog(undefined));
     }, []);
 
     return (
-        <div class="grid-container">
-            {renderBlogPostElements(blogs?.results ?? [])}
+        <div>
+            <div class="grid-container">
+                {renderBlogPostElements(blogs)}
+            </div>
+            <div class="button-container">
+                {renderPaginationButtons(blogs ?? [], setBlogs)}
+            </div>
         </div>
     );
 }
