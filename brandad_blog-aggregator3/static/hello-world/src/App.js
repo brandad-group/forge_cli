@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
-import { fetchBlogPosts, fetchBlogSpace, fetchBlogImage } from './api-service';
-import { spacesCache, navStack } from './storage';
+import {fetchBlogPosts, fetchBlogSpace, fetchBlogImage, getBaseUrl} from './api-service';
+import {spacesCache, navStack, baseUrl} from './storage';
 import { router , view} from '@forge/bridge';
 
 const loadBlog = async (nextLink, back = false) => {
@@ -52,6 +52,7 @@ function App() {
 
     useEffect(async () => {
         await view.theme.enable();
+        baseUrl = await getBaseUrl();
         setBlogs(await loadBlog(undefined));
     }, []);
 

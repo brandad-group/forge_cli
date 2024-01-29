@@ -19,6 +19,7 @@ permissions:
     - read:page:confluence
     - read:space:confluence
     - read:attachment:confluence
+    - manage:confluence-configuration
   external:
     images:
       - '*'
